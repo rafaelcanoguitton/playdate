@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View, Text, TextInput, Pressable, BackHandler } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Text, TextInput, Pressable, BackHandler, KeyboardAvoidingView, Platform } from "react-native";
 import { Formik, useField } from "formik";
 import { useNavigate } from "react-router-native";
+import { setter, obj } from "./Types/PersonalInfo";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import * as Yup from "yup";
+
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
@@ -138,6 +141,9 @@ const RegisterForm = ({ onSubmit }) => {
             value={passwordConfirmation.value}
             secureTextEntry={true}
         />
+        <BouncyCheckbox onPress={(isChecked: boolean) => { }} text="Acepto los términos y condiciones" textStyle={{
+            textDecorationLine: "none",
+        }} />
         <Pressable onPress={onSubmit} style={styles.button} testID="submitButton">
             <Text style={styles.buttonText}>Registrarse</Text>
         </Pressable>
@@ -156,7 +162,8 @@ const RegisterContainer = ({ onSubmit }) => {
     );
 };
 
-const Register = () => {
+
+const Register = ({ setInfo, info }: { setInfo: setter, info: obj }) => {
     //const [register] = useRegister();
     useEffect(() => {
         const backAction = () => {
@@ -172,9 +179,10 @@ const Register = () => {
     }, []);
     const navigate = useNavigate();
     const onSubmit = (values) => {
-        console.log(values);
+        setInfo({ ...info, email: values.email, username: values.username, password: values.password });
+        navigate("/gender");
     }
-    return (<View style={styles.container}>
+    return (<KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
         <View style={{ flex: 3, alignItems: "center", justifyContent: "flex-end" }}>
             <View style={styles.logoButton}>
                 <Text style={styles.logoText}>Playdate</Text>
@@ -183,7 +191,7 @@ const Register = () => {
         <View style={{ flex: 8, justifyContent: "center" }}>
             <RegisterContainer onSubmit={onSubmit} />
         </View>
-    </View>);
+    </KeyboardAvoidingView>);
 };
 
 export default Register;

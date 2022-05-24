@@ -1,9 +1,20 @@
 import React from "react";
-import { StyleSheet, View, Text, TextInput, Pressable } from "react-native";
+import { StyleSheet, View, Text, TextInput, Pressable, KeyboardAvoidingView, Platform } from "react-native";
 import { Formik, useField } from "formik";
 import { useNavigate } from "react-router-native";
 import * as Yup from "yup";
-
+import axios from 'axios';
+import constants from 'expo-constants';
+import * as SecureStore from 'expo-secure-store';
+//types
+type FormikParameter = {
+    name: string,
+    [x: string]: any;
+}
+type fnFromObj = {
+    [x: string]: (values: any) => void;
+}
+///////
 const initialValues = {
     username: "",
     password: "",
@@ -16,7 +27,7 @@ const validationSchema = Yup.object({
         .min(6, "La contraseña debe tener mínimo 6 caracteres"),
 });
 
-const FormikTextInput = ({ name, ...props }) => {
+const FormikTextInput = ({ name, ...props }: FormikParameter) => {
     const [field, meta, helpers] = useField(name);
     const showError = meta.touched && meta.error;
     return (
@@ -39,9 +50,9 @@ const styles = StyleSheet.create({
         backgroundColor: "#181a1b",
         flexDirection: "column",
     },
-    loginContainer:{
-        
-        justifyContent:"flex-start",
+    loginContainer: {
+
+        justifyContent: "flex-start",
     },
     text: {
         color: "white",
@@ -96,11 +107,11 @@ const styles = StyleSheet.create({
         padding: 10,
 
     },
-    registerText:{
+    registerText: {
         color: "#287596",
     }
 });
-const LoginForm = ({ onSubmit }) => {
+const LoginForm = ({ onSubmit }: fnFromObj) => {
     const [username, usernameMeta, setUsername] = useField("username");
     const [password, passwordMeta, setPassword] = useField("password");
     return (
@@ -126,7 +137,7 @@ const LoginForm = ({ onSubmit }) => {
         </View>
     );
 };
-const LoginContainer = ({ onSubmit }) => {
+const LoginContainer = ({ onSubmit }: fnFromObj) => {
     return (
         <Formik
             initialValues={initialValues}
@@ -137,17 +148,21 @@ const LoginContainer = ({ onSubmit }) => {
         </Formik>
     );
 };
+
 const Login = () => {
     // const [login]= useLogin();
     const history = useNavigate();
-    const onSubmit = (values: any) => {
-
+    const onSubmit = async (values: any) => {
+        const apiURL = constants.manifest!.extra!.apiUrl + 'api/users/login/';
+        const response = await axios.post(apiURL, values);
+        await SecureStore.setItemAsync("token", response.data.token);
+        goToRegister();
     };
     const goToRegister = () => {
-        history("/register");
+        history("/gender");
     };
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
             <View style={{ flex: 4, alignItems: "center", justifyContent: "center" }}>
                 <View style={styles.logoButton}>
                     <Text style={styles.logoText}>Playdate</Text>
@@ -162,11 +177,11 @@ const Login = () => {
             </View>
             <View style={{ flex: 8, justifyContent: "center" }}>
                 <LoginContainer onSubmit={onSubmit} />
-                <Pressable style={{alignItems:"center",justifyContent:"flex-start",margin:5}} onPress={goToRegister}>
-                    <Text style={styles.registerText}>¿Aún no estás registradx?</Text>
+                <Pressable style={{ alignItems: "center", justifyContent: "flex-start", margin: 5 }} onPress={goToRegister}>
+                    <Text style={styles.registerText}>¿Aún no estás registrado?</Text>
                 </Pressable>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 };
 
