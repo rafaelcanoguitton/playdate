@@ -159,7 +159,7 @@ const Login = () => {
         goToRegister();
     };
     const goToRegister = () => {
-        history("/gender");
+        history("/register");
     };
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>

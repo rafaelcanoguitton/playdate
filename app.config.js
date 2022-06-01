@@ -39,4 +39,15 @@ export default {
         ? process.env.API_URL_DEV
         : process.env.API_URL_PROD,
   },
+  expo: {
+    plugins: [
+      [
+        "expo-image-picker",
+        {
+          photosPermission:
+            "The app accesses your photos to let you share them with your friends.",
+        },
+      ],
+    ],
+  },
 };

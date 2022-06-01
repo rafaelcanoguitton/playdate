@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Pressable, BackHandler, KeyboardAvoidingView, Platform, FlatList } from "react-native";
+import { StyleSheet, View, Text, TextInput, Pressable, BackHandler, KeyboardAvoidingView, Platform, FlatList, Image } from "react-native";
 import { useNavigate } from "react-router-native";
 import { Bounceable } from 'rn-bounceable';
 
-const styles = StyleSheet.create({
+
+export const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         flexShrink: 1,
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         textAlign: "center",
-        marginVertical: 50,
+        marginVertical: 30,
     },
     required: {
         color: "red",
@@ -54,6 +55,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderRadius: 10,
         marginBottom: 70,
+        marginTop: 20,
     },
     buttonText: {
         color: "white",
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const TextContainer = ({ text, addGender, remGender }: { text: any, addGender: any, remGender: any }) => {
+export const TextContainer = ({ text, addGender, remGender }: { text: any, addGender: any, remGender: any }) => {
     const onPress = () => {
         if (pressed) {
             remGender(text);
@@ -106,9 +108,10 @@ const TextContainer = ({ text, addGender, remGender }: { text: any, addGender: a
         </View>
     </Bounceable>
 };
-
-const genderMock = ["Masculino", "Feminino", "Gay", "Lesbiana", "No binario", "Otro","asdfasdf","a","g"];
+export const genderMock = ["Masculino", "Feminino", "Gay", "Lesbiana", "No binario", "Otro","asdfasdf","a","g"];
 const Gender = ({ setInfo, info }: { setInfo: any, info: any }) => {
+    const imageList = [require('../assets/gender/im1.png'),require("../assets/gender/im2.png")];
+    const navigate = useNavigate();
     const [genders, setGenders] = useState(new Set());
     const addGender = (gender: any) => {
         setGenders(prevState => new Set([...prevState, gender]));
@@ -117,9 +120,8 @@ const Gender = ({ setInfo, info }: { setInfo: any, info: any }) => {
         setGenders(prev => new Set([...prev].filter(x => x !== gender)))
     };
     const onNext = () => {
-        console.log(genders);
-        console.log(Array.from(genders));
         setInfo({ ...info, gender: Array.from(genders) });
+        navigate('/preferences');
     };
     return (<KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
         <View style={{ flex: 3, alignItems: "center", justifyContent: "flex-end" }}>
@@ -128,7 +130,10 @@ const Gender = ({ setInfo, info }: { setInfo: any, info: any }) => {
             </View>
             <Text style={styles.middleText}>¿Cómo te identificas?</Text>
             <FlatList data={genderMock} renderItem={({ item }) => <TextContainer text={item} addGender={addGender} remGender={remGender} />} numColumns={2} columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 5, justifyContent: "center",flexDirection:"row"}}/>
-
+                <Image   
+                    style={{height:200,resizeMode:"contain",alignSelf:"center",marginTop:5}}
+                    source={imageList[Math.floor(Math.random() * imageList.length)]}
+                />
             <Bounceable>
                 <Pressable style={styles.button} onPress={onNext}>
                     <Text style={styles.buttonText}>Siguiente</Text>

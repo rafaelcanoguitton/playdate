@@ -4,6 +4,10 @@ import { StyleSheet, View } from "react-native";
 import Login from "./Login";
 import Register from "./Register";
 import Gender from "./Gender";
+import Preferences from "./Preferences";
+import Platforms from "./Platforms";
+import Topics from "./Topics";
+import ImageProfile from "./ImagePicker";
 import * as SecureStore from 'expo-secure-store';
 
 const styles = StyleSheet.create({
@@ -44,6 +48,10 @@ const Main = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register setInfo={setPersonalInfo} info={personalInfo} />} />
                 <Route path="/gender" element={<Gender setInfo={setPersonalInfo} info={personalInfo} />} />
+                <Route path="/preferences" element={<Preferences setInfo={setPersonalInfo} info={personalInfo} />} />
+                <Route path="/platforms" element={<Platforms setInfo={setPersonalInfo} info={personalInfo} />} />
+                <Route path="/topics" element={<Topics setInfo={setPersonalInfo} info={personalInfo} />} />
+                <Route path="/pictures" element={<ImageProfile setInfo={setPersonalInfo} info={personalInfo} />} />
             </Routes>
         </View>
     );
