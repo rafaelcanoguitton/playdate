@@ -156,10 +156,17 @@ const Login = () => {
         const apiURL = constants.manifest!.extra!.apiUrl + 'api/users/login/';
         const response = await axios.post(apiURL, values);
         await SecureStore.setItemAsync("token", response.data.token);
-        goToRegister();
+        if (response.data.token) {
+            goHome();
+        } else {
+            alert("Usuario o contraseña incorrectos");
+        }
     };
     const goToRegister = () => {
         history("/register");
+    };
+    const goHome = () => {
+        history("/home");
     };
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>

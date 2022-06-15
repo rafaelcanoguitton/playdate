@@ -33,6 +33,7 @@ export default {
     },
   },
   extra: {
+    mode: "development",
     env: process.env.ENV,
     apiUrl:
       process.env.ENV === "development"
@@ -49,5 +50,14 @@ export default {
         },
       ],
     ],
+    extra: {
+      mode: "development",
+      env: process.env.ENV,
+      apiUrl:
+        process.env.ENV === "development"
+          ? process.env.API_URL_DEV
+          : process.env.API_URL_PROD,
+    },
+    userInterfaceStyle: "light",
   },
 };

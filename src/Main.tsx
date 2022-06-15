@@ -8,6 +8,7 @@ import Preferences from "./Preferences";
 import Platforms from "./Platforms";
 import Topics from "./Topics";
 import ImageProfile from "./ImagePicker";
+import Home from "./Home";
 import * as SecureStore from 'expo-secure-store';
 
 const styles = StyleSheet.create({
@@ -28,23 +29,24 @@ export const initialPersonalInfoState = {
     topics: [],
 };
 
-
 const Main = () => {
     const [personalInfo, setPersonalInfo] = useState(initialPersonalInfoState);
     const history = useNavigate();
     useEffect(() => {
         const getTokenAndNavigate = async () => {
             const token = await SecureStore.getItemAsync("token");
-            if (token !== null) {
-                history('/register');
-            }
-            getTokenAndNavigate();
+            console.log(token);
+            // if (token === null) {
+            //     history('/login');
+            // }
+            history('/home')
         };
+        getTokenAndNavigate();
     }, [])
     return (
         <View style={styles.container}>
             <Routes>
-                <Route path="/" element={<Navigate to="/login" />} />
+                <Route path="/" element={<Navigate to="/home" />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register setInfo={setPersonalInfo} info={personalInfo} />} />
                 <Route path="/gender" element={<Gender setInfo={setPersonalInfo} info={personalInfo} />} />
@@ -52,6 +54,7 @@ const Main = () => {
                 <Route path="/platforms" element={<Platforms setInfo={setPersonalInfo} info={personalInfo} />} />
                 <Route path="/topics" element={<Topics setInfo={setPersonalInfo} info={personalInfo} />} />
                 <Route path="/pictures" element={<ImageProfile setInfo={setPersonalInfo} info={personalInfo} />} />
+                <Route path="/home" element={<Home />} />
             </Routes>
         </View>
     );
