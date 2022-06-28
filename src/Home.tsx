@@ -86,19 +86,7 @@ const Home = () => {
 
     const AnimatedIcon = Animated.createAnimatedComponent(Entypo);
     const navigate = useNavigate();
-    // const mockPerson = {
-    //     name: '🔥 Ibai tu CACHERO 🔥',
-    //     email: 'rafxar@gmail.com',
-    //     image: 'https://upload.wikimedia.org/wikipedia/commons/e/ef/Ibai_Llanos_in_2020.jpg',
-    //     topics: [
-    //         "🔥 Cachero 🔥",
-    //         "🔥 Smoking 🔥",
-    //         "Gaming",
-    //         "CompScience",
-    //     ],
-    //     bio: "Me gusta el café  y las películas de romance ☕📚📽"
-    // }
-    //elementos para la animación
+
     const translateX = useSharedValue(0);
     const { width: screenWidth } = useWindowDimensions();
     const hiddenTranslateWidth = screenWidth * 2;
@@ -133,10 +121,10 @@ const Home = () => {
     }));
     const likeStyle = useAnimatedStyle(() => ({
         opacity: interpolate(translateX.value, [0, hiddenTranslateWidth / 5], [0, 1]),
-      }));
-      const nopeStyle = useAnimatedStyle(() => ({
+    }));
+    const nopeStyle = useAnimatedStyle(() => ({
         opacity: interpolate(translateX.value, [0, -hiddenTranslateWidth / 5], [0, 1]),
-      }));
+    }));
     const randomChange = () => {
         translateX.value = withSpring(Math.random());
     };
@@ -178,8 +166,8 @@ const Home = () => {
                 </Animated.View>
                 <PanGestureHandler onGestureEvent={gestureHandler}>
                     <Animated.View style={[{ flex: 6, justifyContent: 'center', alignItems: 'center' }, cardStyle]}>
-                        <AnimatedIcon name="heart" size={200} color="red" style={[{ position: "absolute", top: "50%",zIndex:1 },likeStyle]} />
-                        <AnimatedIcon name="circle-with-cross" size={200} color="red" style={[{ position: "absolute", top: "50%",zIndex:1 },nopeStyle]} />
+                        <AnimatedIcon name="heart" size={200} color="red" style={[{ position: "absolute", top: "50%", zIndex: 1 }, likeStyle]} />
+                        <AnimatedIcon name="circle-with-cross" size={200} color="red" style={[{ position: "absolute", top: "50%", zIndex: 1 }, nopeStyle]} />
                         {people[currentIndex] && <PersonCard person={people[currentIndex]} />}
                     </Animated.View>
                 </PanGestureHandler>

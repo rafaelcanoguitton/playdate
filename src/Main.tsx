@@ -35,11 +35,11 @@ const Main = () => {
     useEffect(() => {
         const getTokenAndNavigate = async () => {
             const token = await SecureStore.getItemAsync("token");
-            console.log(token);
-            // if (token === null) {
-            //     history('/login');
-            // }
-            history('/home')
+            if (token === null) {
+                history('/login');
+            } else {
+                history('/home');
+            }
         };
         getTokenAndNavigate();
     }, [])
