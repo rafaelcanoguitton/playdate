@@ -23,6 +23,7 @@ export default {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#FFFFFF",
     },
+    package: "com.playdate",
   },
   web: {
     favicon: "./assets/favicon.png",
@@ -59,5 +60,8 @@ export default {
           : process.env.API_URL_PROD,
     },
     userInterfaceStyle: "light",
+    android: {
+      package: "com.playdate",
+    },
   },
 };
