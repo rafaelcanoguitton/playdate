@@ -140,10 +140,18 @@ const Home = () => {
                 translateX.value = withSpring(0);
                 return;
             }
-            translateX.value = withSpring(
-                hiddenTranslateWidth * Math.sign(event.velocityX), {}, () => runOnJS(setCurrentIndex)(currentIndex + 1));
+            likeFunction();
         },
     });
+
+    const likeFunction = () => {
+        translateX.value = withSpring(hiddenTranslateWidth, {}, () => runOnJS(setCurrentIndex)(currentIndex + 1));
+    }
+    const goBack = () => {
+        if(currentIndex > 0){
+            setCurrentIndex(currentIndex - 1);
+        }
+    }
     useEffect(() => {
         translateX.value = 0;
     }, [currentIndex]);
@@ -152,6 +160,7 @@ const Home = () => {
     useEffect(() => {
         const getPeople = async () => {
             const URL = constants.manifest!.extra!.apiUrl + 'api/users/get_users';
+            console.log(URL);
             const response = await axios.get(URL);
             setPeople(response.data);
         }
@@ -173,12 +182,12 @@ const Home = () => {
                 </PanGestureHandler>
                 <View style={{ flexDirection: 'column', justifyContent: 'flex-end', width: "80%", flex: 1 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 30 }}>
-                        <Pressable onPress={randomChange}>
+                        <Pressable onPress={likeFunction}>
                             <View style={{ backgroundColor: 'white', padding: 10, borderRadius: 100, alignItems: 'center', justifyContent: 'center' }}>
                                 <Ionicons name="ios-heart" size={30} color="red" />
                             </View>
                         </Pressable>
-                        <Pressable onPress={() => navigate('/home')}>
+                        <Pressable onPress={goBack}>
                             <View style={{ backgroundColor: 'white', padding: 10, borderRadius: 100, alignItems: 'center', justifyContent: 'center' }}>
                                 <Ionicons name="arrow-back" size={30} color="#D6CD04" />
                             </View>

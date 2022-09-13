@@ -36,7 +36,7 @@ const Main = () => {
         const getTokenAndNavigate = async () => {
             const token = await SecureStore.getItemAsync("token");
             if (token === null) {
-                history('/login');
+                history('/');
             } else {
                 history('/home');
             }
@@ -46,7 +46,7 @@ const Main = () => {
     return (
         <View style={styles.container}>
             <Routes>
-                <Route path="/" element={<Navigate to="/home" />} />
+                <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register setInfo={setPersonalInfo} info={personalInfo} />} />
                 <Route path="/gender" element={<Gender setInfo={setPersonalInfo} info={personalInfo} />} />
