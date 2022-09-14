@@ -27,23 +27,36 @@ const ImageProfile = ({ setInfo, info }: { setInfo: any, info: any }) => {
     const navigate = useNavigate();
     const onNext = async () => {
         try {
-            const apiURL = constants.manifest!.extra!.apiUrl + 'api/users/login/';
+            const apiURL = constants.manifest!.extra!.apiUrl + 'api/users/register/';
             const formData = new FormData();
-            formData.append('pictures', {
-                uri: image,
-                name: 'image.jpg',
-                type: 'image/jpg',
+            formData.append('email', info.email);
+            formData.append('username', info.username);
+            formData.append('password', info.password);
+            info.gender.forEach((gender, index) => {
+                formData.append(`gender[${index}]`, gender);
             });
-            const json = JSON.stringify(info);
-            const blob = new Blob([json], { type: 'application/json' });
-            formData.append('data', blob);
-            const config = {
+            info.preferences.forEach((preference, index) => {
+                formData.append(`preferences[${index}]`, preference);
+            });
+            info.topics.forEach((topic, index) => {
+                formData.append(`topics[${index}]`, topic);
+            });
+            const fileExtension = image.split('.').pop();
+            const fileName = `${info.username}.${fileExtension}`;
+            console.log("image is ", image);
+            formData.append('pictures[0]', {
+                uri: image,
+                type: `image/${fileExtension}`,
+                name: fileName,
+            });
+            console.log(apiURL);
+            console.log(formData);
+            // const response = await axios.request(config);
+            const response = await axios.post(apiURL, formData, {
                 headers: {
-                    'content-type': 'multipart/form-data',
-                },
-            };
-            const response = await axios.post(apiURL, formData, config);
-            console.log(response.data);
+                    'Content-Type': 'multipart/form-data; boundary=---011000010111000001101001'
+                }
+            });
             const token = response.data.token;
             await SecureStore.setItemAsync('token', token);
             if (token) {
@@ -51,8 +64,9 @@ const ImageProfile = ({ setInfo, info }: { setInfo: any, info: any }) => {
             } else {
                 navigate('/home');
             }
-        } catch(error){
+        } catch (error) {
             console.log(error);
+            console.log(error.response);
         } finally {
             navigate('/home');
         }

@@ -9,6 +9,8 @@ import Platforms from "./Platforms";
 import Topics from "./Topics";
 import ImageProfile from "./ImagePicker";
 import Home from "./Home";
+import Chats from "./Chats";
+import Chat from "./Chat";
 import * as SecureStore from 'expo-secure-store';
 
 const styles = StyleSheet.create({
@@ -55,6 +57,8 @@ const Main = () => {
                 <Route path="/topics" element={<Topics setInfo={setPersonalInfo} info={personalInfo} />} />
                 <Route path="/pictures" element={<ImageProfile setInfo={setPersonalInfo} info={personalInfo} />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/chats" element={<Chats />} />
+                <Route path="/chat" element={<Chat />} />
             </Routes>
         </View>
     );

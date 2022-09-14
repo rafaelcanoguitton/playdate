@@ -24,7 +24,7 @@ const Preferences = ({ setInfo, info }: { setInfo: any, info: any }) => {
                 <Text style={styles.logoText}>Playdate</Text>
             </View>
             <Text style={styles.middleText}>¿Cuales son tus preferencias?</Text>
-            <FlatList data={genderMock} renderItem={({ item }) => <TextContainer text={item} addGender={addGender} remGender={remGender} />} numColumns={2} columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 5, justifyContent: "center", flexDirection: "row" }} />
+            <FlatList data={genderMock} renderItem={({ item }) => <TextContainer text={item} addGender={addGender} remGender={remGender} />} numColumns={2} columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 5, justifyContent: "center", flexDirection: "row" }} keyExtractor={(item, index) => index.toString()} />
             <Image   
                     style={{height:200,resizeMode:"contain",alignSelf:"center",marginTop:5}}
                     source={imageList[Math.floor(Math.random() * imageList.length)]}

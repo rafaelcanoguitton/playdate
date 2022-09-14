@@ -17,7 +17,7 @@ const Topics = ({ setInfo, info }: { setInfo: any, info: any }) => {
         setTopics(prev => new Set([...prev].filter(x => x !== topic)));
     };
     const onNext = () => {
-        setInfo({ ...info, gender: Array.from(topics) });
+        setInfo({ ...info, topics: Array.from(topics) });
         console.log(info);
         navigate('/pictures');
     };
