@@ -25,7 +25,7 @@ const Match = ({ user }: { user: any }) => {
 }
 const Matches = () => {
     const [matches, setMatches] = useState([]);
-    const apiUrl = constants.manifest!.extra!.apiUrl + "/api/users/get_matches/";
+    const apiUrl = constants.manifest!.extra!.apiUrl + "api/users/get_matches/";
     useEffect(() => {
         const getMatches = async () => {
             const token = await SecureStore.getItemAsync('token')
@@ -77,7 +77,7 @@ const Chats = () => {
     //when you click on a chat, it takes you to the chat page
 
     const [chats, setChats] = useState([]);
-    const apiUrl = constants.manifest!.extra!.apiUrl + "/api/users/get_chats/";
+    const apiUrl = constants.manifest!.extra!.apiUrl + "api/users/get_chats/";
     useEffect(() => {
         const getChats = async () => {
             const token = await SecureStore.getItemAsync('token')
@@ -90,7 +90,7 @@ const Chats = () => {
         };
         getChats();
     }, []);
-    console.log(chats);
+    //console.log(chats);
     return <View style={{ width: "100%", flex: 1, flexDirection: "column" }}>
         <Matches />
         <FlatList data={chats} renderItem={({ item }) => <Chat chatLine={item.last_chat_line} user={item.recipient} chat={item.chat} />} keyExtractor={item => item.id} style={{ width: "100%" }} />

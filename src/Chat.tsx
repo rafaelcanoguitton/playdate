@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, TextInput, Pressable, BackHandler, KeyboardAvoidingView, Platform, FlatList, Image, useWindowDimensions } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet, View, Text, TextInput, Pressable, BackHandler, KeyboardAvoidingView, Platform, FlatList, Image, useWindowDimensions, Button } from "react-native";
 import { useNavigate, Navigate, useLocation } from "react-router-native";
 import { Bounceable } from 'rn-bounceable';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -33,9 +33,9 @@ const FloatingBackButton = () => {
             elevation: 10,
         }
     });
-    return <View style={styles.BackButton}><Bounceable onPress={() => navigate('/chats')}>
+    return <View style={styles.BackButton}><View onTouchEnd={() => navigate('/chats')}>
         <Ionicons name="arrow-back" size={24} color="black" />
-    </Bounceable></View>
+    </View></View>
 }
 
 const PersonBanner = ({ user }: { user: any }) => {
@@ -65,13 +65,28 @@ const PersonBanner = ({ user }: { user: any }) => {
 };
 const Chat = () => {
     const location = useLocation();
-    const user = location.state.user;
+    const [user, setUser] = useState(location.state.user);
     const [chat, setChat] = useState(location.state.chat);
     const [message, setMessage] = useState("");
-
+    const ws = useRef<WebSocket>(null);
+    useEffect(() => {
+        console.log(chat.lines);
+        ws.current = new WebSocket(`ws://192.168.0.105:8000/ws/chat/${chat.id}/`);
+        ws.current.onopen = () => {
+            console.log("connected");
+        };
+        ws.current.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            if (data.user === location.state.user.id) {
+                setChat((chat) => {
+                    return { ...chat, lines: [data,...chat.lines] };
+                });
+            }
+        };
+    }, []);
     const SendMessage = async () => {
         const token = await SecureStore.getItemAsync('token');
-        const apiUrl = constants.manifest!.extra!.apiUrl + "/api/users/send_message/";
+        const apiUrl = constants.manifest!.extra!.apiUrl + "api/users/send_message/";
         const response = await axios.post(apiUrl, {
             chat_id: chat.id,
             message: message,
@@ -80,7 +95,8 @@ const Chat = () => {
                 'Authorization': `token ${token}`
             },
         });
-        setChat({ ...chat, lines: [...chat.lines, response.data.line] });
+        ws.current.send(JSON.stringify(response.data));
+        setChat({ ...chat, lines: [response.data,...chat.lines] });
         setMessage("");
     }
 
@@ -131,6 +147,7 @@ const Chat = () => {
         <PersonBanner user={user} />
         <FlatList
             data={chat.lines}
+            inverted={true}
             style={{
                 width: "100%", height: "100%", borderTopColor: "gray",
                 borderTopWidth: 2,
@@ -149,9 +166,9 @@ const Chat = () => {
         />
         <KeyboardAvoidingView style={styles.messageBox} behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <TextInput placeholder="Escribe un mensaje..." value={message} onChangeText={(text) => setMessage(text)} />
-            <Bounceable onPress={SendMessage} >
+            <View onTouchEnd={SendMessage} >
                 <Ionicons name="send" size={24} color="black" />
-            </Bounceable>
+            </View>
         </KeyboardAvoidingView>
     </View>
 };

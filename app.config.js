@@ -24,6 +24,19 @@ export default {
       backgroundColor: "#FFFFFF",
     },
     package: "com.playdate",
+    intentFilters: [
+      {
+        action: "VIEW",
+        data: [
+          {
+            scheme: "https",
+            host: "play-date-api.up.railway.app",
+            pathPrefix: "/api",
+          },
+        ],
+        category: ["BROWSABLE", "DEFAULT"],
+      },
+    ],
   },
   web: {
     favicon: "./assets/favicon.png",
@@ -32,6 +45,8 @@ export default {
     infoPlist: {
       UIUserInterfaceStyle: "Light",
     },
+    bundleIdentifier: "com.playdate",
+    associatedDomains: ["applinks:play-date-api.up.railway.app"],
   },
   extra: {
     mode: "development",
